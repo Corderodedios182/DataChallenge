@@ -1,4 +1,4 @@
-# DataChallenge
+# :monocle_face: DataChallenge  :world_map: :truck:
 
 **Objetivo de este problema es determinar los factores que pueden llevar a los concesionarios a cumplir con los objetivos de satisfacción mínima.**
 
@@ -37,3 +37,5 @@ Datos *deIiveryDatasetChaIlenge.json* incluye datos de 29,389 rutas de camiones,
   - 3: mas de 1O años
 - **emploIoyeePrevComps:** Número de empresas en las que el empleado trabajó anteriormente desarrollando la misma función (5 significa 3 o más).
 - **success:** El distribuidor ha distribuido al menos el valor esperado (1) o menos (0)
+
+[![Python](https://github.com/jalbertsr/logo-badge-images/blob/master/img/rsz_python.png?raw=true)](https://www.python.org/)
