@@ -103,10 +103,6 @@ def dataModel(data_filter):
     preprocesamiento de datos para modelo de machine learning, selección de columnas e ingeniería de características.
     """
     
-    data_model = data_filter
-    
-    data_model.index = data_filter["anonID"]
-    
     data_model = data_filter.loc[:,["edad","region","gender","areaWealthLevel",
                                      "badWeather", "weatherRestrictions", "areaPopulation", 
                                      "routeTotalDistance","numberOfShops","marketShare","avgAreaBenefits",

@@ -143,7 +143,7 @@ plt.ylabel('Error')
 plt.legend()
 
 #Mejor modelo analizando knn con Sesgo y Varianza.
-clf_knn = KNeighborsClassifier(n_neighbors=4)
+clf_knn = KNeighborsClassifier(n_neighbors=5)
 clf_knn.fit(x_train, y_train)
 score = clf_knn.score(x_train, y_train)
 print("Score: ", score)
@@ -187,5 +187,14 @@ plt.ylabel('True Positive Rate')
 plt.xlabel('False Positive Rate')
 plt.title('Curva ROC para kNN')
 plt.show()
+
+#Resultados.
+data_output = pd.concat([pd.DataFrame(x_test.index),
+                         pd.DataFrame(y_test).reset_index(),
+                         pd.DataFrame(y_pred)], axis = 1)
+
+data_output = data_output.iloc[:,[1,2,3]]
+data_output.columns = ["anonID","success_real","success_pred"]
+data_output
 
 #Knn : No dio los mejores resultados para está clasificación.
