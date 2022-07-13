@@ -125,7 +125,7 @@ from sklearn.preprocessing import LabelEncoder
 data_select = data_filter.loc[:,["edad","region","gender","areaWealthLevel",
                                  "badWeather", "weatherRestrictions", "areaPopulation", 
                                  "routeTotalDistance","numberOfShops","marketShare","avgAreaBenefits",
-                                 "timeFromAvg","advertising","employeeLYScore","employeeTenure","employeePrevComps"]]
+                                 "timeFromAvg","advertising","employeeLYScore","employeeTenure","employeePrevComps","success"]]
 
 le = LabelEncoder()
 data_select["region"] = le.fit_transform(data_select["region"])
@@ -153,3 +153,99 @@ tmp.head(25)
 tmp.tail()
 
 #Propuesta Modelo : Supervisado -> Clasificación : (KNeighborsClassifier, LogisticRegression, LinearSVC, SVC)
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+
+#Modelo KNN
+data_model = data_select
+x, y = data_model.iloc[:,:-1], data_model.success
+
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size = 0.3, random_state = 21, stratify = y)
+
+ytest.value_counts(normalize = True)
+ytrain.value_counts(normalize = True)
+
+knc = KNeighborsClassifier(n_neighbors=3)
+knc.fit(xtrain, ytrain)
+score = knc.score(xtrain, ytrain)
+print("Score: ", score)
+
+ypred = knc.predict(xtest)
+
+#Métricas de Clásificación.
+#     Predicted: 0   Predicted: 1
+#0    True Positive  False Negative
+#1    False Positive True Negative
+
+cm = confusion_matrix(ytest, ypred)
+ytest.value_counts()
+print(cm)
+
+accuracy_score(ytest, ypred) #Porcentaje total de valores correctamente clasificados, tanto positivos como negativos.
+precision_score(ytest, ypred) #Saber qué porcentaje de valores que se han clasificado como positivos son realmente positivos.
+recall_score(ytest, ypred) #Cuantos valores positivos son correctamente clasificados.
+f1_score(ytest, ypred) #
+
+cr = classification_report(ytest, ypred)
+print(cr)
+  
+#Curva Roc
+fpr, tpr, threshold = roc_curve(ytest, ypred)
+roc_auc = auc(fpr, tpr)
+
+plt.title('Receiver Operating Characteristic')
+plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
+plt.legend(loc = 'lower right')
+plt.plot([0, 1], [0, 1],'r--')
+plt.xlim([0, 1])
+plt.ylim([0, 1])
+plt.ylabel('True Positive Rate')
+plt.xlabel('False Positive Rate')
+plt.title('ROC Curve of kNN')
+plt.show()
+
+#Tuneo de hyperparametros.
+
+#Regiones de desición variando los parametros
+plt.rcParams['figure.figsize'] = [20, 20]
+plt.title("Knn región de desición líneal")
+plt_cls.plot_decision_boundaries(X, y,  KNeighborsClassifier,n_neighbors=2)
+plt_cls.plot_decision_boundaries(X, y,  KNeighborsClassifier,n_neighbors=8)
+plt_cls.plot_decision_boundaries(X, y,  KNeighborsClassifier,n_neighbors=15)
+
+#Grafica variando el numero de n_neighbors y su presición.
+n_neighbors = range(1,20)
+train  = []
+test = []
+
+for i in n_neighbors:
+    knn = KNeighborsClassifier(n_neighbors=i)
+    knn.fit(X_train, y_train)
+    
+    train.append(knn.score(X_train, y_train))
+    test.append(knn.score(X_test, y_test))
+
+plt.rcParams['figure.figsize'] = [5, 5]
+line_up, = plt.plot(n_neighbors, train , label='Training Accuracy')
+line_down, = plt.plot(n_neighbors, test, label='Testing Accuracy')
+plt.title("KNN : Variación de numero de cluster")
+plt.legend([line_up, line_down], ['Training Accuracy', 'Testing Accuracy'])
+plt.annotate('Overfiting', xy = (1.5, .94), arrowprops = {'facecolor':'gray', 'width': 3, 'shrink': 0.03})
+plt.annotate('Optimo', xy = (8, .94), arrowprops = {'facecolor':'gray', 'width': 3, 'shrink': 0.03})
+plt.annotate('Underfiting', xy = (16, .94), arrowprops = {'facecolor':'gray', 'width': 3, 'shrink': 0.03})
+
+#Sesgo y Varianza.
+#Dejar modularizado el código.
+#Crear data set de resultados.
+#Probar otro modelo.
+
+#Seguir exploración de variables.
