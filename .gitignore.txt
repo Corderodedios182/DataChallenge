@@ -3,6 +3,11 @@
 
 # Ignore All (xlsx) files
 *.xlsx
+*/databases to have fun
+*/parquet
+*.parquet
+*.txt
+*.csv
 
 # DO-NOT ignore specific file
 !DBB/Tool Input.xlsx
