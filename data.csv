@@ -1,0 +1,25 @@
+variable,analisis
+anonID,Caracteristica
+birthdate,características conductores
+edad,características conductores
+gender,características conductores
+employeeLYScore,características conductores
+employeeTenure,características conductores
+employeePrevComps,características conductores
+routeDate,caracteristicas de la ruta
+month,caracteristicas de la ruta
+day,caracteristicas de la ruta
+year,caracteristicas de la ruta
+routeTotalDistance,caracteristicas de la ruta
+timeFromAvg,caracteristicas de la ruta
+region,caracteristicas geograficas
+badWeather,caracteristicas geograficas
+weatherRestrictions,caracteristicas geograficas
+areaPopulation,caracteristicas geograficas
+areaWealthLevel,caracteristicas socieconomicas
+numberOfShops,caracteristicas socieconomicas
+marketShare,caracteristicas socieconomicas
+avgAreaBenefits,caracteristicas socieconomicas
+advertising,caracteristicas socieconomicas
+region-gender-areaWealthLevel-badWeather-weatherRestrictions,
+success,

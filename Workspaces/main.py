@@ -197,4 +197,6 @@ data_output = data_output.iloc[:,[1,2,3]]
 data_output.columns = ["anonID","success_real","success_pred"]
 data_output
 
+data_output.to_csv("data_output.csv")
+
 #Knn : No dio los mejores resultados para está clasificación.

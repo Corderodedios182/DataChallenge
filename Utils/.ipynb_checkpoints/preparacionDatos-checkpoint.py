@@ -77,15 +77,7 @@ def dataClean(data):
 ########################
 #Datos para exploración#
 ########################
-def dataFilter(data):
-    
-    """
-    filtrado de datos para analisis de datos.
-    """
-    
-    data_filter = data[(data["success"] >= 0) & ~(data["routeDate"].isnull())]
-    
-    return data_filter
+
 
 #Variables categoricas, respecto a la distribución (0,1)
 def grupos(data_filter ,grupo = ['region','success'], num_grupos = 2):
@@ -102,6 +94,10 @@ def dataModel(data_filter):
     """ 
     preprocesamiento de datos para modelo de machine learning, selección de columnas e ingeniería de características.
     """
+    
+    data_model = data_filter
+    
+    data_model.index = data_filter["anonID"]
     
     data_model = data_filter.loc[:,["edad","region","gender","areaWealthLevel",
                                      "badWeather", "weatherRestrictions", "areaPopulation", 

@@ -58,6 +58,37 @@ def dataClean(data):
     data["birthdate"] = pd.to_datetime(data["birthdate"])
     data["edad"] = data["birthdate"].apply(edad)
     
+    #filters = [(data.edad >= 30) & (data.edad <= 39),
+    #           (data.edad >= 40) & (data.edad <= 49),
+    #           (data.edad >= 50) & (data.edad <= 99),]
+    
+    #values = [30, 40, 50]
+    
+    #data["edad"] = np.select(filters, values)
+    
+    filters_marketShare = [(data.marketShare >= 10) & (data.marketShare <= 19),
+                           (data.marketShare >= 20) & (data.marketShare <= 29),
+                           (data.marketShare >= 30) & (data.marketShare <= 39),
+                           (data.marketShare >= 40) & (data.marketShare <= 49),
+                           (data.marketShare >= 50) & (data.marketShare <= 59),
+                           (data.marketShare >= 60) & (data.marketShare <= 69),
+                           (data.marketShare >= 70) & (data.marketShare <= 79),
+                           (data.marketShare >= 80) & (data.marketShare <= 89),
+                           (data.marketShare >= 90) & (data.marketShare <= 101)]
+    
+    values = [10,20,30,40,50,60,70,80,90]
+    
+    data["range_marketShare"] = np.select(filters_marketShare, values)
+    
+    filters_avgAreaBenefits = [(data.avgAreaBenefits > 0) & (data.avgAreaBenefits < 20),
+                               (data.avgAreaBenefits >= 20) & (data.avgAreaBenefits < 31),
+                               (data.avgAreaBenefits > 30) & (data.avgAreaBenefits < 41),
+                               (data.avgAreaBenefits > 40) & (data.avgAreaBenefits < 1000)]
+    
+    values = [10,20,30,40]
+    
+    data["range_avgAreaBenefits"] = np.select(filters_avgAreaBenefits, values)
+        
     data["routeDate"] = np.where(data["routeDate"] == 'NA', '', data["routeDate"])
     data["routeDate"] = pd.to_datetime(data["routeDate"])
     data["month"] = data["routeDate"].dt.month.astype(str)
@@ -70,6 +101,7 @@ def dataClean(data):
     #Reacomodo
     data = data.loc[:,["anonID","birthdate","edad","routeDate","month","day","year","region","gender","areaWealthLevel","badWeather","weatherRestrictions",
                        "region-gender-areaWealthLevel-badWeather-weatherRestrictions","areaPopulation","routeTotalDistance","numberOfShops","marketShare",
+                       "range_marketShare","range_avgAreaBenefits",
                        "avgAreaBenefits","timeFromAvg","advertising","employeeLYScore","employeeTenure","employeePrevComps","success"]]
     
     return data
@@ -77,15 +109,7 @@ def dataClean(data):
 ########################
 #Datos para exploración#
 ########################
-def dataFilter(data):
-    
-    """
-    filtrado de datos para analisis de datos.
-    """
-    
-    data_filter = data[(data["success"] >= 0) & ~(data["routeDate"].isnull())]
-    
-    return data_filter
+
 
 #Variables categoricas, respecto a la distribución (0,1)
 def grupos(data_filter ,grupo = ['region','success'], num_grupos = 2):
@@ -107,16 +131,20 @@ def dataModel(data_filter):
     
     data_model.index = data_filter["anonID"]
     
-    data_model = data_filter.loc[:,["edad","region","gender","areaWealthLevel",
-                                     "badWeather", "weatherRestrictions", "areaPopulation", 
-                                     "routeTotalDistance","numberOfShops","marketShare","avgAreaBenefits",
-                                     "timeFromAvg","advertising","employeeLYScore","employeeTenure","employeePrevComps","success"]]
+    #data_model = data_filter.loc[:,["edad","region","areaWealthLevel",
+    #                                 "badWeather",# "weatherRestrictions",# "areaPopulation", 
+    #                                 "routeTotalDistance","numberOfShops","marketShare","avgAreaBenefits",
+    #                                 "timeFromAvg","advertising","employeeLYScore","employeeTenure","employeePrevComps","success"]]
+    
+    data_model = data_filter.loc[:,["avgAreaBenefits","routeTotalDistance","advertising","employeeLYScore",
+                                    "range_marketShare","range_avgAreaBenefits","timeFromAvg","employeePrevComps","numberOfShops",
+                                    "success"]]
 
-    le = LabelEncoder()
-    data_model["region"] = le.fit_transform(data_model["region"])
-    data_model["gender"] = le.fit_transform(data_model["gender"])
-    data_model["areaWealthLevel"] = le.fit_transform(data_model["areaWealthLevel"])
-    data_model["badWeather"] = le.fit_transform(data_model["badWeather"])
-    data_model["weatherRestrictions"] = le.fit_transform(data_model["weatherRestrictions"])
+    #le = LabelEncoder()
+    #data_model["region"] = le.fit_transform(data_model["region"])
+    #data_model["gender"] = le.fit_transform(data_model["gender"])
+    #data_model["areaWealthLevel"] = le.fit_transform(data_model["areaWealthLevel"])
+    #data_model["badWeather"] = le.fit_transform(data_model["badWeather"])
+    #data_model["weatherRestrictions"] = le.fit_transform(data_model["weatherRestrictions"])
     
     return data_model
